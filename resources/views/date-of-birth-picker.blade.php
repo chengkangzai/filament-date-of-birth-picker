@@ -1,146 +1,149 @@
 @php
     $statePath = $getStatePath();
-    $currentDate = $getState();
-    $currentDay = null;
-    $currentMonth = null;
-    $currentYear = null;
-    
-    if ($currentDate) {
-        $dateParts = explode('-', $currentDate);
-        if (count($dateParts) === 3) {
-            $currentYear = (int) $dateParts[0];
-            $currentMonth = (int) $dateParts[1];
-            $currentDay = (int) $dateParts[2];
-        }
-    }
-    
+    $childState = $getChildComponentState();
     $startYear = $getStartYear();
     $endYear = $getEndYear();
+    $monthLabels = $getMonthLabels();
+    $minDate = $getMinDate();
+    $maxDate = $getMaxDate();
+    $placeholders = config('date-of-birth-picker.localization.placeholder_labels', [
+        'day' => 'Day',
+        'month' => 'Month',
+        'year' => 'Year'
+    ]);
+    $validationMessage = config('date-of-birth-picker.localization.validation_message', 'Please select a valid date.');
 @endphp
 
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
-    <div class="flex gap-2">
+    <div 
+        x-data="dateOfBirthPicker()"
+        x-init="
+            day = {{ $childState['day'] ?? 'null' }};
+            month = {{ $childState['month'] ?? 'null' }};
+            year = {{ $childState['year'] ?? 'null' }};
+            startYear = {{ $startYear }};
+            endYear = {{ $endYear }};
+            statePath = '{{ $statePath }}';
+            monthLabels = @json(array_map(fn($label, $index) => ['value' => $index + 1, 'label' => $label], $monthLabels, array_keys($monthLabels)));
+            minDate = {{ $minDate ? "'" . $minDate . "'" : 'null' }};
+            maxDate = {{ $maxDate ? "'" . $maxDate . "'" : 'null' }};
+        "
+        class="flex gap-2"
+        role="group"
+        aria-labelledby="{{ $getId() }}-label"
+    >
         <!-- Day Dropdown -->
         <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Day
+            <label 
+                for="{{ $getId() }}-day"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+                {{ $placeholders['day'] }}
             </label>
             <select 
+                id="{{ $getId() }}-day"
+                x-model="day"
                 wire:model.live="{{ $statePath }}.day"
+                @keydown="handleKeyDown($event, 'day')"
                 class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:text-white"
-                data-dob-day
+                aria-label="Day of birth"
+                aria-describedby="{{ $getId() }}-day-help"
+                :aria-invalid="!isValidDate() && (day || month || year) ? 'true' : 'false'"
             >
-                <option value="">Day</option>
-                @for ($day = 1; $day <= 31; $day++)
-                    <option value="{{ $day }}" @selected($currentDay === $day)>
-                        {{ $day }}
-                    </option>
-                @endfor
+                <option value="">{{ $placeholders['day'] }}</option>
+                <template x-for="dayOption in getDays()" :key="dayOption">
+                    <option 
+                        :value="dayOption" 
+                        x-text="dayOption"
+                        :selected="day == dayOption"
+                    ></option>
+                </template>
             </select>
+            <div id="{{ $getId() }}-day-help" class="sr-only">
+                Select the day of your birth date
+            </div>
         </div>
 
         <!-- Month Dropdown -->
         <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Month
+            <label 
+                for="{{ $getId() }}-month"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+                {{ $placeholders['month'] }}
             </label>
             <select 
+                id="{{ $getId() }}-month"
+                x-model="month"
                 wire:model.live="{{ $statePath }}.month"
+                @keydown="handleKeyDown($event, 'month')"
                 class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:text-white"
-                data-dob-month
+                aria-label="Month of birth"
+                aria-describedby="{{ $getId() }}-month-help"
+                :aria-invalid="!isValidDate() && (day || month || year) ? 'true' : 'false'"
             >
-                <option value="">Month</option>
-                @foreach([
-                    1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
-                    5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
-                    9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
-                ] as $monthNum => $monthName)
-                    <option value="{{ $monthNum }}" @selected($currentMonth === $monthNum)>
-                        {{ $monthName }}
-                    </option>
-                @endforeach
+                <option value="">{{ $placeholders['month'] }}</option>
+                <template x-for="monthOption in getMonths()" :key="monthOption.value">
+                    <option 
+                        :value="monthOption.value" 
+                        x-text="monthOption.label"
+                        :selected="month == monthOption.value"
+                    ></option>
+                </template>
             </select>
+            <div id="{{ $getId() }}-month-help" class="sr-only">
+                Select the month of your birth date
+            </div>
         </div>
 
         <!-- Year Dropdown -->
         <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Year
+            <label 
+                for="{{ $getId() }}-year"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+                {{ $placeholders['year'] }}
             </label>
             <select 
+                id="{{ $getId() }}-year"
+                x-model="year"
                 wire:model.live="{{ $statePath }}.year"
+                @keydown="handleKeyDown($event, 'year')"
                 class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:text-white"
-                data-dob-year
+                aria-label="Year of birth"
+                aria-describedby="{{ $getId() }}-year-help"
+                :aria-invalid="!isValidDate() && (day || month || year) ? 'true' : 'false'"
             >
-                <option value="">Year</option>
-                @for ($year = $endYear; $year >= $startYear; $year--)
-                    <option value="{{ $year }}" @selected($currentYear === $year)>
-                        {{ $year }}
-                    </option>
-                @endfor
+                <option value="">{{ $placeholders['year'] }}</option>
+                <template x-for="yearOption in getYears()" :key="yearOption">
+                    <option 
+                        :value="yearOption" 
+                        x-text="yearOption"
+                        :selected="year == yearOption"
+                    ></option>
+                </template>
             </select>
+            <div id="{{ $getId() }}-year-help" class="sr-only">
+                Select the year of your birth date
+            </div>
         </div>
     </div>
 
-    <input type="hidden" wire:model="{{ $statePath }}" data-dob-hidden />
+    <!-- Validation Message -->
+    <div 
+        x-show="!isValidDate() && day && month && year"
+        x-transition
+        class="mt-1 text-sm text-red-600 dark:text-red-400"
+        role="alert"
+        aria-live="polite"
+    >
+        {{ $validationMessage }}
+    </div>
+
+    <!-- Screen Reader Status -->
+    <div class="sr-only" aria-live="polite" aria-atomic="true">
+        <span x-show="isValidDate() && day && month && year">
+            Selected date: <span x-text="`${getMonths().find(m => m.value == month)?.label || ''} ${day}, ${year}`"></span>
+        </span>
+    </div>
 </x-dynamic-component>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const daySelect = document.querySelector('[data-dob-day]');
-    const monthSelect = document.querySelector('[data-dob-month]');
-    const yearSelect = document.querySelector('[data-dob-year]');
-    const hiddenInput = document.querySelector('[data-dob-hidden]');
-
-    function updateDays() {
-        const month = parseInt(monthSelect.value);
-        const year = parseInt(yearSelect.value);
-        const currentDay = parseInt(daySelect.value);
-        
-        if (!month || !year) return;
-        
-        const daysInMonth = new Date(year, month, 0).getDate();
-        
-        // Clear existing options
-        daySelect.innerHTML = '<option value="">Day</option>';
-        
-        // Add valid days
-        for (let day = 1; day <= daysInMonth; day++) {
-            const option = document.createElement('option');
-            option.value = day;
-            option.textContent = day;
-            if (day === currentDay && day <= daysInMonth) {
-                option.selected = true;
-            }
-            daySelect.appendChild(option);
-        }
-        
-        updateHiddenInput();
-    }
-
-    function updateHiddenInput() {
-        const day = daySelect.value;
-        const month = monthSelect.value;
-        const year = yearSelect.value;
-        
-        if (day && month && year) {
-            const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-            hiddenInput.value = formattedDate;
-            hiddenInput.dispatchEvent(new Event('input'));
-        } else {
-            hiddenInput.value = '';
-            hiddenInput.dispatchEvent(new Event('input'));
-        }
-    }
-
-    daySelect.addEventListener('change', updateHiddenInput);
-    monthSelect.addEventListener('change', function() {
-        updateDays();
-        updateHiddenInput();
-    });
-    yearSelect.addEventListener('change', function() {
-        updateDays();
-        updateHiddenInput();
-    });
-});
-</script>

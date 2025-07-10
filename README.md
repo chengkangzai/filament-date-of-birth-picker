@@ -64,22 +64,55 @@ DateOfBirthPicker::make('date_of_birth')
 
 ### Advanced Usage
 
-You can customize the year range:
+You can customize the year range and date constraints:
 
 ```php
 DateOfBirthPicker::make('date_of_birth')
     ->label('Date of Birth')
     ->startYear(1900)
     ->endYear(2010)
+    ->minDate('1900-01-01')
+    ->maxDate('2010-12-31')
     ->required()
+```
+
+### Internationalization
+
+Customize month labels for different languages:
+
+```php
+DateOfBirthPicker::make('date_of_birth')
+    ->monthLabels([
+        'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+        'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    ])
+```
+
+Or configure globally in the config file:
+
+```php
+// config/date-of-birth-picker.php
+'localization' => [
+    'month_labels' => [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ],
+    'placeholder_labels' => [
+        'day' => 'Día',
+        'month' => 'Mes',
+        'year' => 'Año',
+    ],
+    'validation_message' => 'Por favor seleccione una fecha válida.',
+],
 ```
 
 ### Validation
 
 The component includes built-in validation:
 - Ensures the date is valid
-- Checks that the date is not in the future
+- Checks that the date is not in the future (configurable)
 - Handles leap years correctly
+- Supports min/max date constraints
 
 You can add additional validation rules:
 
@@ -88,6 +121,28 @@ DateOfBirthPicker::make('date_of_birth')
     ->label('Date of Birth')
     ->rules(['required', 'date', 'before:2010-01-01'])
 ```
+
+### Configuration
+
+Publish the configuration file to customize default behavior:
+
+```bash
+php artisan vendor:publish --tag="filament-date-of-birth-picker-config"
+```
+
+Available configuration options:
+- Default year range
+- Date format
+- Validation rules
+- Internationalization settings
+- Date constraints
+- Accessibility features
+
+### Performance Features
+
+- **Cached Arrays**: Year and month options are cached for optimal performance
+- **Smart Date Validation**: Client-side validation with leap year support
+- **Optimized Assets**: Minified CSS and JavaScript with automatic purging
 
 ## Testing
 

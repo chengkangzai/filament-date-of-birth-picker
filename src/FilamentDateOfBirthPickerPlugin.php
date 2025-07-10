@@ -14,12 +14,14 @@ class FilamentDateOfBirthPickerPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        //
+        // The component is automatically registered through the service provider
+        // Additional panel-specific registration can be done here if needed
     }
 
     public function boot(Panel $panel): void
     {
-        //
+        // Plugin is booted after all other plugins are registered
+        // Any additional setup can be done here
     }
 
     public static function make(): static
