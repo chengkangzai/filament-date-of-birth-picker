@@ -1,13 +1,19 @@
-# Native dropdown picker for birthday
+# Filament Date of Birth Picker
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/cck/filament-date-of-birth-picker.svg?style=flat-square)](https://packagist.org/packages/cck/filament-date-of-birth-picker)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/cck/filament-date-of-birth-picker/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/cck/filament-date-of-birth-picker/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/cck/filament-date-of-birth-picker/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/cck/filament-date-of-birth-picker/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/cck/filament-date-of-birth-picker.svg?style=flat-square)](https://packagist.org/packages/cck/filament-date-of-birth-picker)
 
+A native dropdown picker for date of birth selection in Filament forms. This package provides three separate dropdown components for day, month, and year selection, making it easy for users to select their date of birth without using a calendar picker or manual input.
 
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Features:
+- Three separate dropdown components (day, month, year)
+- Smart day calculation based on selected month and year
+- Leap year handling for February
+- Configurable year range
+- Built-in validation
+- Seamless integration with Filament forms
 
 ## Installation
 
@@ -45,9 +51,42 @@ return [
 
 ## Usage
 
+Add the DateOfBirthPicker to your Filament form:
+
 ```php
-$filamentDateOfBirthPicker = new CCK\FilamentDateOfBirthPicker();
-echo $filamentDateOfBirthPicker->echoPhrase('Hello, CCK!');
+use CCK\FilamentDateOfBirthPicker\DateOfBirthPicker;
+
+// In your Filament form
+DateOfBirthPicker::make('date_of_birth')
+    ->label('Date of Birth')
+    ->required()
+```
+
+### Advanced Usage
+
+You can customize the year range:
+
+```php
+DateOfBirthPicker::make('date_of_birth')
+    ->label('Date of Birth')
+    ->startYear(1900)
+    ->endYear(2010)
+    ->required()
+```
+
+### Validation
+
+The component includes built-in validation:
+- Ensures the date is valid
+- Checks that the date is not in the future
+- Handles leap years correctly
+
+You can add additional validation rules:
+
+```php
+DateOfBirthPicker::make('date_of_birth')
+    ->label('Date of Birth')
+    ->rules(['required', 'date', 'before:2010-01-01'])
 ```
 
 ## Testing
