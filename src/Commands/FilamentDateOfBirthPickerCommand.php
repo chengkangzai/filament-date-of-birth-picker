@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace CCK\FilamentDateOfBirthPicker\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FilamentDateOfBirthPickerCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-date-of-birth-picker';
 
     public $description = 'My command';
 

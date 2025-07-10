@@ -1,15 +1,15 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace CCK\FilamentDateOfBirthPicker;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class SkeletonPlugin implements Plugin
+class FilamentDateOfBirthPickerPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'filament-date-of-birth-picker';
     }
 
     public function register(Panel $panel): void
