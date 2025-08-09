@@ -143,7 +143,7 @@
     <!-- Screen Reader Status -->
     <div class="sr-only" aria-live="polite" aria-atomic="true">
         <span x-show="isValidDate() && day && month && year">
-            Selected date: <span x-text="`${getMonths().find(m => m.value == month)?.label || ''} ${day}, ${year}`"></span>
+            Selected date: <span x-text="getMonths().find(m => m.value == month) ? `${getMonths().find(m => m.value == month).label} ${day}, ${year}` : ''"></span>
         </span>
     </div>
 </x-dynamic-component>
