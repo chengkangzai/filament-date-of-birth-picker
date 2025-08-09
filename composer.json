@@ -1,15 +1,15 @@
 {
-    "name": "cck/filament-date-of-birth-picker",
+    "name": "chengkangzai/filament-date-of-birth-picker",
     "description": "Native dropdown picker for birthday",
     "keywords": [
         "CCK",
         "laravel",
         "filament-date-of-birth-picker"
     ],
-    "homepage": "https://github.com/cck/filament-date-of-birth-picker",
+    "homepage": "https://github.com/chengkangzai/filament-date-of-birth-picker",
     "support": {
-        "issues": "https://github.com/cck/filament-date-of-birth-picker/issues",
-        "source": "https://github.com/cck/filament-date-of-birth-picker"
+        "issues": "https://github.com/chengkangzai/filament-date-of-birth-picker/issues",
+        "source": "https://github.com/chengkangzai/filament-date-of-birth-picker"
     },
     "license": "MIT",
     "authors": [
