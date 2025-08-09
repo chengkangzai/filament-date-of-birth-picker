@@ -1,9 +1,9 @@
 # Filament Date of Birth Picker
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/cck/filament-date-of-birth-picker.svg?style=flat-square)](https://packagist.org/packages/cck/filament-date-of-birth-picker)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/cck/filament-date-of-birth-picker/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/cck/filament-date-of-birth-picker/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/cck/filament-date-of-birth-picker/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/cck/filament-date-of-birth-picker/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/cck/filament-date-of-birth-picker.svg?style=flat-square)](https://packagist.org/packages/cck/filament-date-of-birth-picker)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/chengkangzai/filament-date-of-birth-picker.svg?style=flat-square)](https://packagist.org/packages/chengkangzai/filament-date-of-birth-picker)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/chengkangzai/filament-date-of-birth-picker/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/chengkangzai/filament-date-of-birth-picker/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/chengkangzai/filament-date-of-birth-picker/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/chengkangzai/filament-date-of-birth-picker/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/chengkangzai/filament-date-of-birth-picker.svg?style=flat-square)](https://packagist.org/packages/chengkangzai/filament-date-of-birth-picker)
 
 A native dropdown picker for date of birth selection in Filament forms. This package provides three separate dropdown components for day, month, and year selection, making it easy for users to select their date of birth without using a calendar picker or manual input.
 
@@ -20,7 +20,7 @@ Features:
 You can install the package via composer:
 
 ```bash
-composer require cck/filament-date-of-birth-picker
+composer require chengkangzai/filament-date-of-birth-picker
 ```
 
 You can publish and run the migrations with:
