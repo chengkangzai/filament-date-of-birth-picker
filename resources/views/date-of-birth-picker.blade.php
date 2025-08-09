@@ -12,6 +12,11 @@
         'year' => 'Year'
     ]);
     $validationMessage = config('date-of-birth-picker.localization.validation_message', 'Please select a valid date.');
+    
+    // Prepare month labels for JavaScript
+    $monthLabelsForJs = array_map(function($label, $index) {
+        return ['value' => $index + 1, 'label' => $label];
+    }, $monthLabels, array_keys($monthLabels));
 @endphp
 
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
@@ -24,7 +29,7 @@
             startYear = {{ $startYear }};
             endYear = {{ $endYear }};
             statePath = '{{ $statePath }}';
-            monthLabels = @json(array_map(fn($label, $index) => ['value' => $index + 1, 'label' => $label], $monthLabels, array_keys($monthLabels)));
+            monthLabels = @json($monthLabelsForJs);
             minDate = {{ $minDate ? "'" . $minDate . "'" : 'null' }};
             maxDate = {{ $maxDate ? "'" . $maxDate . "'" : 'null' }};
         "
